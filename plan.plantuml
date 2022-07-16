@@ -1,0 +1,25 @@
+@startuml
+
+
+
+class DataAquisition {
+    Config:json
+}
+
+class Indicator
+class Strategy 
+class Backtest 
+
+Strategy <-- Backtest
+
+
+
+
+
+
+
+
+
+
+
+@enduml
