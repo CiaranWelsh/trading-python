@@ -13,12 +13,11 @@ class DataAcquisition:
 
 
 
-    def __init__(self, api_key, api_secret, **kwargs) -> None:
-        self.kwargs = kwargs
-        self._pair: str 
-        self._timeframe: str
-        self._start = None 
-        self._end = None
+    def __init__(self, symbol: str, timeframe: str, start_str: str, end_str: str) -> None:
+        self._symbol: str = symbol
+        self._timeframe: str = timeframe
+        self._start = start_str
+        self._end = end_str
 
         self.data = self._get_data()
 

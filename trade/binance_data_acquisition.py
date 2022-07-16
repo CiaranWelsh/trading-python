@@ -10,9 +10,9 @@ class BinanceDataAcquisition(DataAcquisition):
         "Number of trades", "Taker buy base,"
         "asset volume", "Taker buy quote asset volume", "Ignore"
     ]
-    def __init__(self, api_key, api_secret, **kwargs):
+    def __init__(self, api_key, api_secret, symbol: str, timeframe: str, start_str: str, end_str: str, ):
         self.client = Client(api_key, api_secret)
-        super().__init__(api_key, api_secret, **kwargs)
+        super().__init__(symbol, timeframe, start_str, end_str)
 
     def _get_data(self) -> pd.DataFrame:
         candles = self.client.get_historical_klines(
