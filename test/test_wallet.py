@@ -42,7 +42,16 @@ def test_wallet_mul2(wallet1000, wallet800):
     wallet = wallet1000 * wallet800
     assert wallet == 800000
 
+def test_wallet_eq(wallet1000):
+    wallet = Wallet(1000)
+    assert wallet == wallet1000
 
+def test_wallet_eq2(wallet1000):
+    assert 1000 == wallet1000
+
+def test_almost_equal():
+    w1 = Wallet(1.2345)
+    assert w1.almost_equal(1.23453, 1e-4)
 
 
 

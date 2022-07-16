@@ -15,7 +15,7 @@ class IndicatorTest(unittest.TestCase):
     def test(self):
         close = self.test_data.Close
         import talib
-        print(talib.SMA(close))
+        print(talib.SMA(close, timeperiod=10).values)
 
 
 
