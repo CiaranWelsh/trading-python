@@ -11,7 +11,6 @@ class BSTTest(unittest.TestCase):
     def setUp(self) -> None:
         pass
 
-
     def tearDown(self) -> None:
         pass
 
@@ -56,6 +55,17 @@ class BSTTest(unittest.TestCase):
         bst.insert(3)
         bst.insert(14)
         self.assertEqual(14, bst.find_max().data)
+
+    def test_Use_more_comparator(self):
+        from trade.bst import More
+        bst = BST(More)
+        bst.insert(5)
+        bst.insert(9)
+        bst.insert(3)
+        bst.insert(14)
+        expected = [14, 9, 5, 3]
+        self.assertEqual(expected, bst.to_list_inorder())
+
 
 
 

@@ -2,20 +2,25 @@ from __future__ import annotations
 from abc import abstractmethod
 from typing import *
 
-Comparable = TypeVar('Comparible')
+T = TypeVar('Comparible')
 
 
-class BSTOperator(Generic[Comparable]):
+class BSTOperator(Generic[T]):
 
     @abstractmethod
-    def compare(self, x: Comparable, y: Comparable):
+    def compare(self, x: T, y: T):
         raise NotImplementedError
 
 
 class Less(BSTOperator):
 
-    def compare(self, x: Comparable, y: Comparable):
+    def compare(self, x: T, y: T):
         return x < y
+
+class More(BSTOperator):
+
+    def compare(self, x: T, y: T):
+        return x > y
 
 
 class BST:
@@ -23,29 +28,30 @@ class BST:
         def __init__(self, val):
             self.left: Optional[BST.bst_node] = None
             self.right: Optional[BST.bst_node] = None
-            self.data: Comparable = val
+            self.data: T = val
             self.count = 1
 
         def __str__(self):
             return self.data.__str__()
 
-    def __init__(self, root=None):
-        self._root: Optional[BST.bst_node] = root
+    def __init__(self, Comparator: T = Less):
+        self._comparator: T = Comparator()
+        self._root: Optional[BST.bst_node] = None
 
     def __str__(self):
         return self.to_list_inorder()
 
-    def find_min(self, t:Optional[BST.bst_node]):
+    def find_min(self, t:Optional[BST.bst_node] = None):
         if not t:
             t = self._root
         return self._find_min(t)
 
-    def find_max(self, t:Optional[BST.bst_node]):
+    def find_max(self, t:Optional[BST.bst_node] = None):
         if not t:
             t = self._root
-        return self._find_min(t)
+        return self._find_max(t)
 
-    def contains(self, x: Comparable):
+    def contains(self, x: T):
         return self._contains(x, self._root)
 
     def is_empty(self):
@@ -58,10 +64,10 @@ class BST:
     def make_empty(self):
         return self._make_empty(self._root)
 
-    def insert(self, x: Comparable):
+    def insert(self, x: T):
         self._root = self._insert(x, self._root)
 
-    def remove(self, x: Comparable):
+    def remove(self, x: T):
         return self._remove(x, self._root)
 
     def inorder(self, fn: Callable):
@@ -97,12 +103,12 @@ class BST:
             return t
         return self._find_max(t.right)
 
-    def _contains(self, x: Comparable, t: BST.bst_node):
+    def _contains(self, x: T, t: BST.bst_node):
         if t is None:
             return False
-        elif t.data < x:
+        elif self._comparator.compare(x, t.data):
             self._contains(x, t.left)
-        elif x < t.data:
+        elif self._comparator.compare(t.data, x):
             self._contains(x, t.right)
         else:
             return True
@@ -120,18 +126,18 @@ class BST:
     def _make_empty(self, t: BST.bst_node):
         pass
 
-    def _insert(self, x: Comparable, t: BST.bst_node):
+    def _insert(self, x: T, t: BST.bst_node):
         if t is None:
             t = self.bst_node(x)
-        elif x < t.data:
+        elif self._comparator.compare(x, t.data):
             t.left = self._insert(x, t.left)
-        elif t.data < x:
+        elif self._comparator.compare(t.data, x):
             t.right = self._insert(x, t.right)
         else:
             t.count += 1
         return t
 
-    def _remove(self, x: Comparable, t: BST.bst_node):
+    def _remove(self, x: T, t: BST.bst_node):
         if not t:
             return
         if x < t.data:
