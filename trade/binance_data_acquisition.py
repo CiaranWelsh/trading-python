@@ -1,6 +1,8 @@
 from binance.client import Client
 from trade.data_acquisition import DataAcquisition
 import pandas as pd
+import numpy as np
+
 
 class BinanceDataAcquisition(DataAcquisition):
 
@@ -16,10 +18,11 @@ class BinanceDataAcquisition(DataAcquisition):
 
     def _get_data(self) -> pd.DataFrame:
         candles = self.client.get_historical_klines(
-            symbol='SOLBUSD', interval=self.client.KLINE_INTERVAL_1HOUR,
-            start_str="1 June, 2022", end_str="1 July, 2022"
+            symbol=self._symbol, interval=self.client.KLINE_INTERVAL_1HOUR,
+            start_str=self._start, end_str=self._end
         )
         df = pd.DataFrame(candles, columns=self._labels)
+        df = df.astype(np.float)
         return df
 
 
